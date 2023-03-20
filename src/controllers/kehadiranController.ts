@@ -67,8 +67,6 @@ export const absen = async (req: Request, res: Response) => {
       dataKehadiran = await kehadiranBaru.save();
     }
 
-
-
     broadcast("Kehadiran")
 
     // Mengirimkan response dengan kehadiran yang baru dibuat

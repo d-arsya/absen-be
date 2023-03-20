@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 import Pegawai, { IPegawai } from "../models/pegawai";
 import { broadcast } from "../routes/wsRoutes";
 
-const tambahData = async (nama: string, email: string, password: string, role: string): Promise<IPegawai> => {
+const tambahData = async (nama: string, email: string, password: string, role: string) => {
   const salt = await bcrypt.genSalt(10);
   const passwordTerenkripsi = await bcrypt.hash(password, salt);
 
   // Membuat pegawai baru
-  const pegawaiBaru: IPegawai = new Pegawai({ nama, email, password: passwordTerenkripsi, role });
+  const pegawaiBaru = new Pegawai({ nama, email, password: passwordTerenkripsi, role });
 
   // Menyimpan pegawai baru ke database
   await pegawaiBaru.save();
@@ -32,7 +32,7 @@ export const tambahPegawai = async (req: Request, res: Response) => {
     }
 
     // Membuat pegawai baru
-    const pegawaiBaru: IPegawai = await tambahData(nama, email, password, role)
+    const pegawaiBaru = await tambahData(nama, email, password, role)
 
     broadcast("Pegawai")
     // Mengirimkan response dengan pegawai yang baru dibuat
@@ -71,7 +71,7 @@ export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    let pegawai: IPegawai = await Pegawai.findOne({ email });
+    let pegawai = await Pegawai.findOne({ email });
     if (!pegawai) {
       if (email === process.env.ADMINEMAIL && password === process.env.ADMINPASS) {
         pegawai = await tambahData(email, email, password, 'admin')
