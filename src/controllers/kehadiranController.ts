@@ -5,14 +5,13 @@ import KodeQR from "../models/kodeqr";
 import Pegawai from "../models/pegawai";
 import { broadcast } from "../routes/wsRoutes";
 
-function generateRandomString(length: number): string {
+function membuatKode(length: number): string {
   return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
 }
 
 export const tampilkanKode = async (req: Request, res: Response) => {
-  const kode = generateRandomString(10);
+  const kode = membuatKode(10);
   try {
-
     const kodeBaru = new KodeQR({ kode });
 
     // Menyimpan kode baru ke database
@@ -28,7 +27,6 @@ export const tampilkanKode = async (req: Request, res: Response) => {
 
 export const absen = async (req: Request, res: Response) => {
   try {
-    // Mengambil ID pegawai dari request body
     const { kode, jenis } = req.body;
 
     // Mencari kode 

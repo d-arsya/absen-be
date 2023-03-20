@@ -77,7 +77,7 @@ export const login = async (req: Request, res: Response) => {
       if (email === process.env.ADMINEMAIL && password === process.env.ADMINPASS) {
         pegawai = await tambahData(email, email, password, 'admin')
       } else {
-        return res.status(400).json({ message: "Email atau password salah 1" });
+        return res.status(400).json({ message: "Email atau password salah" });
       }
     }
 
