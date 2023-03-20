@@ -1,20 +1,20 @@
 import { Express } from 'express';
 import { Application } from 'express-ws';
 
-const clients: Set<any> = new Set();
+const penggunas: Set<any> = new Set();
 
 export const broadcast = (msg: string) => {
-  clients.forEach((client) => {
-    console.log("client.readyState", client.readyState)
-    if (client.readyState === 1) {
-      client.send(msg);
+  penggunas.forEach((pengguna) => {
+    console.log("pengguna.readyState", pengguna.readyState)
+    if (pengguna.readyState === 1) {
+      pengguna.send(msg);
     }
   })
 }
 
 const wsRoutes = (app: Application & Express) => {
   app.ws('/ws', (ws, req) => {
-    clients.add(ws)
+    penggunas.add(ws)
     console.log('Pengguna terhubung');
 
     ws.on('message', (msg) => {
@@ -23,7 +23,7 @@ const wsRoutes = (app: Application & Express) => {
     });
 
     ws.on('close', () => {
-      clients.delete(ws)
+      penggunas.delete(ws)
       console.log('Pengguna terputus');
     });
   });

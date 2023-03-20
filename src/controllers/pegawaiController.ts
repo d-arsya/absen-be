@@ -6,10 +6,10 @@ import { broadcast } from "../routes/wsRoutes";
 
 const tambahData = async (nama: string, email: string, password: string, role: string): Promise<IPegawai> => {
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  const passwordTerenkripsi = await bcrypt.hash(password, salt);
 
   // Membuat pegawai baru
-  const pegawaiBaru: IPegawai = new Pegawai({ nama, email, password: hashedPassword, role });
+  const pegawaiBaru: IPegawai = new Pegawai({ nama, email, password: passwordTerenkripsi, role });
 
   // Menyimpan pegawai baru ke database
   await pegawaiBaru.save();
@@ -26,9 +26,8 @@ export const tambahPegawai = async (req: Request, res: Response) => {
 
   try {
     // Mengecek apakah email sudah ada dalam database
-    const existingPegawai = await Pegawai.findOne({ email });
-    if (existingPegawai) {
-      console.log(existingPegawai)
+    const cekEmail = await Pegawai.findOne({ email });
+    if (cekEmail) {
       return res.status(400).json({ message: "Email sudah digunakan" });
     }
 
