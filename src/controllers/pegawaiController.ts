@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Pegawai, { IPegawai } from "../models/pegawai";
+import Pegawai from "../models/pegawai";
 import { broadcast } from "../routes/wsRoutes";
 
 const tambahData = async (nama: string, email: string, password: string, role: string) => {
