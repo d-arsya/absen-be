@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IKehadiran extends Document {
   pegawai: mongoose.Types.ObjectId;
-  kodeDatang: string;
   datang: Date;
   pulang: Date;
 }
