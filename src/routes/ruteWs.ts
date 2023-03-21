@@ -1,29 +1,29 @@
 import { Express } from 'express';
 import { Application } from 'express-ws';
 
-const penggunas: Set<any> = new Set();
+const semuaPengguna: Set<any> = new Set();
 
-export const broadcast = (msg: string) => {
-  penggunas.forEach((pengguna) => {
+export const broadcast = (pesan: string) => {
+  semuaPengguna.forEach((pengguna) => {
     console.log("pengguna.readyState", pengguna.readyState)
     if (pengguna.readyState === 1) {
-      pengguna.send(msg);
+      pengguna.send(pesan);
     }
   })
 }
 
 const ruteWs = (app: Application & Express) => {
   app.ws('/ws', (ws, req) => {
-    penggunas.add(ws)
+    semuaPengguna.add(ws)
     console.log('Pengguna terhubung');
 
-    ws.on('message', (msg) => {
-      console.log('Pesan diterima:', msg);
-      ws.send(`Pesan diterima: ${msg}`)
+    ws.on('message', (pesan) => {
+      console.log('Pesan diterima:', pesan);
+      ws.send(`Pesan diterima: ${pesan}`)
     });
 
     ws.on('close', () => {
-      penggunas.delete(ws)
+      semuaPengguna.delete(ws)
       console.log('Pengguna terputus');
     });
   });
