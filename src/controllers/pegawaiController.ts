@@ -95,7 +95,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const profilSaya = async (req: Request, res: Response) => {
+export const profil = async (req: Request, res: Response) => {
   try {
     // Mencari pegawai berdasarkan ID
     const pegawai = await Pegawai.findById(req.user.id, { _id: 0, password: 0, __v: 0 });
