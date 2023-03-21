@@ -46,21 +46,22 @@ export const tambahPegawai = async (req: Request, res: Response) => {
 export const semuaPegawai = async (req: Request, res: Response) => {
   try {
     // Ambil halaman dari query parameter atau gunakan 1 sebagai default
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = 10;
+    const halaman = parseInt(req.query.halaman as string) || 1;
+    const dataPerHalaman = 10;
 
     // Menghitung jumlah total dokumen untuk menghitung jumlah halaman
     const totalDocuments = await Pegawai.countDocuments();
-    const totalPages = Math.ceil(totalDocuments / limit);
-
+    const totalHalaman = Math.ceil(totalDocuments / dataPerHalaman);
+    const skip = (halaman - 1) * dataPerHalaman;
+    
     // Mengambil pegawai dari database menggunakan pagination dan mengurutkan berdasarkan tanggal secara descending
-    const dataPegawai = await Pegawai.find({}, { _id: 0, password: 0, __v: 0 })
+    const data = await Pegawai.find({}, { _id: 0, password: 0, __v: 0 })
       .sort({ nama: 1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+      .skip(skip)
+      .limit(dataPerHalaman);
 
     // Mengirimkan response dengan daftar pegawai, halaman saat ini, dan jumlah halaman
-    res.status(200).json({ data: dataPegawai, halaman: page, totalHalaman: totalPages });
+    res.status(200).json({ data, halaman, totalHalaman });
   } catch (error) {
     console.error("Gagal mengambil data pegawai:", error);
     res.status(500).json({ message: "Gagal mengambil data pegawai" });

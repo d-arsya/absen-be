@@ -83,27 +83,28 @@ export const semuaKehadiran = async (req: Request, res: Response) => {
     const halaman = parseInt(req.query.halaman as string) || 1;
 
     // Menentukan jumlah data per halaman
-    const limit = 10;
+    const dataPerHalaman = 10;
 
     // Menghitung jumlah data yang akan dilewati berdasarkan halaman saat ini
-    const skip = (halaman - 1) * limit;
+    const skip = (halaman - 1) * dataPerHalaman;
     // Mencari semua kehadiran dengan urutan tanggal descending dan paginasi
     const dataKehadiran = await Kehadiran.find({}, { __v: 0 })
       .sort({ datang: -1 })
       .skip(skip)
-      .limit(limit)
+      .limit(dataPerHalaman)
       .populate("pegawai", { password: 0, __v: 0, role: 0 });
 
     // Menghitung jumlah total kehadiran
-    const totalKehadiran = await Kehadiran.countDocuments();
+    const totalData = await Kehadiran.countDocuments();
+    const totalHalaman = Math.ceil(totalData / dataPerHalaman);
 
     // Mengirimkan response dengan data kehadiran dan informasi paginasi
     res.status(200).json({
       kehadiran: dataKehadiran,
       halamanInfo: {
         halaman,
-        totalHalaman: Math.ceil(totalKehadiran / limit),
-        totalData: totalKehadiran,
+        totalHalaman,
+        totalData,
       },
     });
   } catch (error) {
