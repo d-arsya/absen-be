@@ -6,7 +6,7 @@ interface DecodedUser {
   role: string;
 }
 
-export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
+export const otentikasiMw = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     jwt.verify(authHeader, process.env.JWT_SECRET, (err, decodedUser) => {

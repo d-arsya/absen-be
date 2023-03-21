@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import Kehadiran, { IKehadiran } from "../models/kehadiran";
 import KodeQR from "../models/kodeqr";
 import Pegawai from "../models/pegawai";
-import { broadcast } from "../routes/wsRoutes";
+import { broadcast } from "../routes/ruteWs";
 
 function membuatKode(length: number): string {
   return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
@@ -48,7 +48,6 @@ export const absen = async (req: Request, res: Response) => {
     let dataKehadiran: IKehadiran
 
     if (jenis === 'pulang') {
-
       // Membuat variabel tanggal untuk awal dan akhir hari ini
       const jamMulai = new Date();
       jamMulai.setHours(0, 0, 0, 0);

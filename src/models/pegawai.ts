@@ -8,8 +8,8 @@ export interface IPegawai extends Document {
 }
 
 const skemaPegawai: Schema = new Schema({
-  nama: { type: String, required: true, index: 'text' },
-  email: { type: String, required: true, unique: true, index: 'text' },
+  nama: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["pegawai", "admin"], default: "pegawai" },
 });

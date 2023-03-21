@@ -6,7 +6,7 @@ export interface IKodeqr extends Document {
 }
 
 const skemaKodeQr: Schema = new Schema({
-  kode: { type: String, required: true, unique: true, index: 'text' },
+  kode: { type: String, required: true, unique: true },
   tanggal: { type: Date, required: true, default: Date.now, },
 });
 

@@ -12,7 +12,7 @@ export const broadcast = (msg: string) => {
   })
 }
 
-const wsRoutes = (app: Application & Express) => {
+const ruteWs = (app: Application & Express) => {
   app.ws('/ws', (ws, req) => {
     penggunas.add(ws)
     console.log('Pengguna terhubung');
@@ -29,4 +29,4 @@ const wsRoutes = (app: Application & Express) => {
   });
 };
 
-export default wsRoutes;
+export default ruteWs;

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Pegawai from "../models/pegawai";
-import { broadcast } from "../routes/wsRoutes";
+import { broadcast } from "../routes/ruteWs";
 
 const tambahData = async (nama: string, email: string, password: string, role: string) => {
   const salt = await bcrypt.genSalt(10);

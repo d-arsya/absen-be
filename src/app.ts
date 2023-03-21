@@ -4,9 +4,9 @@ import expressWs from 'express-ws';
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import pegawaiRoutes from "./routes/pegawaiRoutes";
-import kehadiranRoutes from "./routes/kehadiranRoutes";
-import wsRoutes from './routes/wsRoutes';
+import rutePegawai from "./routes/rutePegawai";
+import ruteKehadiran from "./routes/ruteKehadiran";
+import ruteWs from './routes/ruteWs';
 
 dotenv.config();
 
@@ -17,19 +17,17 @@ app.use(cors());
 app.use(morgan('combined'))
 app.use(express.json());
 
-const MONGO_URI = process.env.MONGO_URI;
-const PORT = process.env.PORT || 5000;
-
 mongoose
-  .connect(MONGO_URI)
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Terhubung dengan MongoDB"))
-  .catch((err) => console.log("Gagal terhubung dengan MongoDB:", err, MONGO_URI));
+  .catch((err) => console.log("Gagal terhubung dengan MongoDB:", err ));
 
-app.use("/api/pegawai", pegawaiRoutes);
-app.use("/api/kehadiran", kehadiranRoutes);
+app.use("/api/pegawai", rutePegawai);
+app.use("/api/kehadiran", ruteKehadiran);
 
-wsRoutes(app);
+ruteWs(app);
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
