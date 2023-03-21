@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 interface DecodedUser {
   id: string;
-  role: string;
+  peran: string;
 }
 
 export const otentikasiMw = (req: Request, res: Response, next: NextFunction) => {
