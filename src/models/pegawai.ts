@@ -4,14 +4,14 @@ export interface IPegawai extends Document {
   nama: string;
   email: string;
   password: string;
-  role: "pegawai" | "admin";
+  peran: "pegawai" | "admin";
 }
 
 const skemaPegawai: Schema = new Schema({
   nama: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["pegawai", "admin"], default: "pegawai" },
+  peran: { type: String, enum: ["pegawai", "admin"], default: "pegawai" },
 });
 
 export default mongoose.model<IPegawai>("Pegawai", skemaPegawai, 'pegawai');

@@ -5,7 +5,7 @@ export const aksesPeran = (...perans: string[]) => {
     const peranPengguna = req.user.peran; // Ganti dengan mekanisme otentikasi Anda
 
     if (!perans.includes(peranPengguna)) {
-      return res.status(403).json({ message: 'Dilaran' });
+      return res.status(403).json({ message: 'Dilarang' });
     }
 
     next();

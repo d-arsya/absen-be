@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 import Pegawai from "../models/pegawai";
 import { broadcast } from "../routes/ruteWs";
 
-const tambahData = async (nama: string, email: string, password: string, role: string) => {
+const tambahData = async (nama: string, email: string, password: string, peran: string) => {
   const salt = await bcrypt.genSalt(10);
   const passwordTerenkripsi = await bcrypt.hash(password, salt);
 
   // Membuat pegawai baru
-  const pegawaiBaru = new Pegawai({ nama, email, password: passwordTerenkripsi, role });
+  const pegawaiBaru = new Pegawai({ nama, email, password: passwordTerenkripsi, peran });
 
   // Menyimpan pegawai baru ke database
   await pegawaiBaru.save();
@@ -17,7 +17,7 @@ const tambahData = async (nama: string, email: string, password: string, role: s
 }
 
 export const tambahPegawai = async (req: Request, res: Response) => {
-  const { nama, email, password, role } = req.body;
+  const { nama, email, password, peran } = req.body;
 
   // Validasi data yang diterima dari request
   if (!nama || !email || !password) {
@@ -32,7 +32,7 @@ export const tambahPegawai = async (req: Request, res: Response) => {
     }
 
     // Membuat pegawai baru
-    const pegawaiBaru = await tambahData(nama, email, password, role)
+    const pegawaiBaru = await tambahData(nama, email, password, peran)
 
     broadcast("Pegawai")
     // Mengirimkan response dengan pegawai yang baru dibuat
@@ -86,7 +86,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email atau password salah" });
     }
 
-    const token = jwt.sign({ id: pegawai._id, role: pegawai.role }, process.env.JWT_SECRET || "secret", {
+    const token = jwt.sign({ id: pegawai._id, peran: pegawai.peran }, process.env.JWT_SECRET || "secret", {
       expiresIn: "1w",
     });
 

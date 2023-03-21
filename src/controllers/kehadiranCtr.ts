@@ -91,7 +91,7 @@ export const semuaKehadiran = async (req: Request, res: Response) => {
       .sort({ datang: -1 })
       .skip(skip)
       .limit(dataPerHalaman)
-      .populate("pegawai", { password: 0, __v: 0, role: 0 });
+      .populate("pegawai", { password: 0, __v: 0, peran: 0 });
 
     // Menghitung jumlah total kehadiran
     const totalData = await Kehadiran.countDocuments();
