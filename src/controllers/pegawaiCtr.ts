@@ -31,7 +31,7 @@ export const tambahPegawai = async (req: Request, res: Response) => {
 
   // Validasi data yang diterima dari request
   if (!nama || !email || !password) {
-    return res
+    res
       .status(400)
       .json({ message: "Nama, email dan password harus disertakan" });
   }
@@ -40,7 +40,7 @@ export const tambahPegawai = async (req: Request, res: Response) => {
     // Mengecek apakah email sudah ada dalam database
     const cekEmail = await Pegawai.findOne({ email });
     if (cekEmail) {
-      return res.status(400).json({ message: "Email sudah digunakan" });
+      res.status(400).json({ message: "Email sudah digunakan" });
     }
 
     // Membuat pegawai baru
@@ -92,17 +92,17 @@ export const login = async (req: Request, res: Response) => {
       ) {
         pegawai = await tambahData(email, email, password, "admin");
       } else {
-        return res.status(400).json({ message: "Email atau password salah" });
+        res.status(400).json({ message: "Email atau password salah" });
       }
     }
 
-    const isPasswordValid = await bcrypt.compare(password, pegawai.password);
+    const isPasswordValid = await bcrypt.compare(password, pegawai!.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Email atau password salah" });
+      res.status(400).json({ message: "Email atau password salah" });
     }
 
     const token = jwt.sign(
-      { id: pegawai._id, peran: pegawai.peran },
+      { id: pegawai!._id, peran: pegawai!.peran },
       process.env.JWT_SECRET || "secret",
       {
         expiresIn: "1w",
@@ -118,7 +118,7 @@ export const login = async (req: Request, res: Response) => {
 export const profil = async (req: Request, res: Response) => {
   try {
     // Mencari pegawai berdasarkan ID
-    const pegawai = await Pegawai.findById(req.user.id, {
+    const pegawai = await Pegawai.findById(res.locals.user.id, {
       _id: 0,
       password: 0,
       __v: 0,
@@ -126,9 +126,9 @@ export const profil = async (req: Request, res: Response) => {
 
     if (!pegawai) {
       // Jika pegawai tidak ditemukan, kirimkan pesan error
-      return res.status(404).json({ message: "Data tidak ditemukan" });
+      res.status(404).json({ message: "Data tidak ditemukan" });
     }
-    return res.status(200).json({ data: pegawai });
+    res.status(200).json({ data: pegawai });
   } catch (error) {
     console.error("Gagal mengambil data profil:", error);
     res.status(500).json({ message: "Gagal mengambil data profil" });

@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
-import crypto from 'crypto';
+import crypto from "crypto";
 import Kehadiran, { IKehadiran } from "../models/kehadiran";
 import KodeQR from "../models/kodeqr";
 import Pegawai from "../models/pegawai";
 import { broadcast } from "../routes/ruteWs";
 
 function membuatKode(length: number): string {
-  return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
+    .toString("hex")
+    .slice(0, length);
 }
 
 export const tampilkanKode = async (req: Request, res: Response) => {
@@ -23,31 +26,31 @@ export const tampilkanKode = async (req: Request, res: Response) => {
     console.error("Gagal mengambil kode:", error);
     res.status(500).json({ message: "Gagal mengambil kode" });
   }
-}
+};
 
 export const absen = async (req: Request, res: Response) => {
   try {
     const { kode, jenis } = req.body;
 
-    // Mencari kode 
+    // Mencari kode
     const dataKode = await KodeQR.findOne({ kode });
 
     if (!dataKode) {
       // Jika pegawai tidak ditemukan, kirimkan pesan error
-      return res.status(404).json({ message: "Kode QR tidak ditemukan" });
+      res.status(404).json({ message: "Kode QR tidak ditemukan" });
     }
-    await KodeQR.findOneAndDelete({ kode })
+    await KodeQR.findOneAndDelete({ kode });
     // Mencari pegawai berdasarkan ID
-    const pegawai = await Pegawai.findById(req.user.id);
+    const pegawai = await Pegawai.findById(res.locals.user.id);
 
     if (!pegawai) {
       // Jika pegawai tidak ditemukan, kirimkan pesan error
-      return res.status(404).json({ message: "Pegawai tidak ditemukan" });
+      res.status(404).json({ message: "Pegawai tidak ditemukan" });
     }
 
-    let dataKehadiran: IKehadiran
+    let dataKehadiran;
 
-    if (jenis === 'pulang') {
+    if (jenis === "pulang") {
       // Membuat variabel tanggal untuk awal dan akhir hari ini
       const jamMulai = new Date();
       jamMulai.setHours(0, 0, 0, 0);
@@ -55,18 +58,25 @@ export const absen = async (req: Request, res: Response) => {
       const jamAkhir = new Date();
       jamAkhir.setHours(23, 59, 59, 999);
 
-      dataKehadiran = await Kehadiran.findOneAndUpdate({ pegawai: pegawai._id, datang: { $gte: jamMulai, $lt: jamAkhir }, pulang: { $exists: false } }, { $set: { pulang: Date.now() } }, { new: true })
-
+      dataKehadiran = await Kehadiran.findOneAndUpdate(
+        {
+          pegawai: pegawai!._id,
+          datang: { $gte: jamMulai, $lt: jamAkhir },
+          pulang: { $exists: false },
+        },
+        { $set: { pulang: Date.now() } },
+        { new: true }
+      );
     } else {
       // Membuat kehadiran baru
       const kehadiranBaru = new Kehadiran({
-        pegawai: pegawai._id,
+        pegawai: pegawai!._id,
       });
       // Menyimpan kehadiran baru ke database
       dataKehadiran = await kehadiranBaru.save();
     }
 
-    broadcast("Kehadiran")
+    broadcast("Kehadiran");
 
     // Mengirimkan response dengan kehadiran yang baru dibuat
     res.status(201).json({ message: "Berhasil", data: dataKehadiran });

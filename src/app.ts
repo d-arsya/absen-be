@@ -11,8 +11,9 @@ import ruteWs from "./routes/ruteWs";
 dotenv.config();
 
 const app = express();
+const wsInstance = expressWs(app);
 app.get("/", (req: Request, res: Response) => {
-  return res.send(200, { data: "ok" });
+  res.status(200).send({ data: "ok" });
 });
 expressWs(app);
 
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use("/api/pegawai", rutePegawai);
 app.use("/api/kehadiran", ruteKehadiran);
 
-ruteWs(app);
+ruteWs(wsInstance.app);
 
 const PORT = process.env.PORT || 3000;
 

@@ -12,9 +12,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.15.3",
-    "tsc-watch": "^6.0.0",
-    "typescript": "^5.0.2"
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/express-ws": "^3.0.5",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/mongoose": "^5.11.96",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^18.19.68",
+    "@types/ws": "^8.5.13",
+    "tsc-watch": "^6.2.1",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
