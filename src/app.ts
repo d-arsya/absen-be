@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import expressWs from "express-ws";
 import cors from "cors";
@@ -11,20 +11,20 @@ import ruteWs from "./routes/ruteWs";
 dotenv.config();
 
 const app = express();
+app.get("/", (req: Request, res: Response) => {
+  return res.send(200, { data: "ok" });
+});
 expressWs(app);
 
 app.use(cors());
 app.use(morgan("combined"));
 app.use(express.json());
-app.get("/health", (req, res) => {
-  return res.send(200, { data: "ok" });
-});
 app.use("/api/pegawai", rutePegawai);
 app.use("/api/kehadiran", ruteKehadiran);
 
 ruteWs(app);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
