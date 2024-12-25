@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/app.js",
-    "dev": "tsc-watch --onSuccess \"node dist/app.js\""
+    "start": "npx tsc -w",
+    "dev": "npx nodemon",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
