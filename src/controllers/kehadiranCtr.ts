@@ -4,6 +4,7 @@ import Kehadiran, { IKehadiran } from "../models/kehadiran";
 import KodeQR from "../models/kodeqr";
 import Pegawai from "../models/pegawai";
 import { broadcast } from "../routes/ruteWs";
+import { getDistance } from "geolib";
 
 function membuatKode(length: number): string {
   return crypto
@@ -30,7 +31,7 @@ export const tampilkanKode = async (req: Request, res: Response) => {
 
 export const absen = async (req: Request, res: Response) => {
   try {
-    const { kode, jenis } = req.body;
+    const { kode, jenis, latitude, longitude } = req.body;
 
     // Mencari kode
     const dataKode = await KodeQR.findOne({ kode });
@@ -78,8 +79,20 @@ export const absen = async (req: Request, res: Response) => {
 
     broadcast("Kehadiran");
 
+    let distance = getDistance(
+      { latitude, longitude },
+      {
+        latitude: 0,
+        longitude: 0,
+      }
+    );
+
     // Mengirimkan response dengan kehadiran yang baru dibuat
-    res.status(201).json({ message: "Berhasil", data: dataKehadiran });
+    res.status(201).json({
+      message: "Berhasil",
+      data: dataKehadiran,
+      position: { latitude, longitude, distance },
+    });
   } catch (error) {
     console.error("Gagal menambahkan kehadiran:", error);
     res.status(500).json({ message: "Gagal menambahkan kehadiran" });
