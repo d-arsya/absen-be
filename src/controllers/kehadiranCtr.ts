@@ -37,16 +37,18 @@ export const absen = async (req: Request, res: Response) => {
       longitude: 110.37784872482916,
     };
     let distance = await getDistance(
-      { latitude: parseInt(latitude), longitude: parseInt(longitude) },
+      { latitude: parseFloat(latitude), longitude: parseFloat(longitude) },
       sourceLocation
     );
-    console.log(
-      latitude,
-      longitude,
+    console.log({
+      inputLatitude: latitude,
+      inputLongitude: longitude,
+      parsedLatitude: parseFloat(latitude),
+      parsedLongitude: parseFloat(longitude),
       distance,
-      sourceLocation.latitude,
-      sourceLocation.longitude
-    );
+      sourceLatitude: sourceLocation.latitude,
+      sourceLongitude: sourceLocation.longitude,
+    });
 
     // Mencari kode
     const dataKode = await KodeQR.findOne({ kode });
