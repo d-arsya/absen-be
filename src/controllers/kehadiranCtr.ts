@@ -35,8 +35,8 @@ export const absen = async (req: Request, res: Response) => {
     let distance = await getDistance(
       { latitude: parseInt(latitude), longitude: parseInt(longitude) },
       {
-        latitude: 0,
-        longitude: 0,
+        latitude: -7.775166850518112,
+        longitude: 110.37784872482916,
       }
     );
     console.log(latitude, longitude, distance);
