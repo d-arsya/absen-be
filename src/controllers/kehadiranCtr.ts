@@ -32,6 +32,13 @@ export const tampilkanKode = async (req: Request, res: Response) => {
 export const absen = async (req: Request, res: Response) => {
   try {
     const { kode, jenis, latitude, longitude } = req.body;
+    let distance = await getDistance(
+      { latitude: parseInt(latitude), longitude: parseInt(longitude) },
+      {
+        latitude: 0,
+        longitude: 0,
+      }
+    );
 
     // Mencari kode
     const dataKode = await KodeQR.findOne({ kode });
@@ -78,14 +85,6 @@ export const absen = async (req: Request, res: Response) => {
     }
 
     broadcast("Kehadiran");
-
-    let distance = getDistance(
-      { latitude, longitude },
-      {
-        latitude: 0,
-        longitude: 0,
-      }
-    );
 
     // Mengirimkan response dengan kehadiran yang baru dibuat
     res.status(201).json({
