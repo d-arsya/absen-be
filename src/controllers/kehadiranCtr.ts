@@ -39,6 +39,7 @@ export const absen = async (req: Request, res: Response) => {
         longitude: 0,
       }
     );
+    console.log(latitude, longitude, distance);
 
     // Mencari kode
     const dataKode = await KodeQR.findOne({ kode });
