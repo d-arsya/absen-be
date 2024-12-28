@@ -32,14 +32,21 @@ export const tampilkanKode = async (req: Request, res: Response) => {
 export const absen = async (req: Request, res: Response) => {
   try {
     const { kode, jenis, latitude, longitude } = req.body;
+    let sourceLocation = {
+      latitude: -7.775166850518112,
+      longitude: 110.37784872482916,
+    };
     let distance = await getDistance(
       { latitude: parseInt(latitude), longitude: parseInt(longitude) },
-      {
-        latitude: -7.775166850518112,
-        longitude: 110.37784872482916,
-      }
+      sourceLocation
     );
-    console.log(latitude, longitude, distance);
+    console.log(
+      latitude,
+      longitude,
+      distance,
+      sourceLocation.latitude,
+      sourceLocation.longitude
+    );
 
     // Mencari kode
     const dataKode = await KodeQR.findOne({ kode });
